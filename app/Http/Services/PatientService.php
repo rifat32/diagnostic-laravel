@@ -22,7 +22,7 @@ trait PatientService
                 "address",
                 "phone",
                 "sex",
-                "birth_date",
+                "age",
                 "blood_group"
             )
         )->first();

@@ -15,7 +15,7 @@ class Patient extends Model
         "address",
         "phone",
         "sex",
-        "birth_date",
+        "age",
         "blood_group"
     ];
 }

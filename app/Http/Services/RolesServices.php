@@ -10,7 +10,9 @@ trait RolesServices
 {
     public function createRoleService($request)
     {
-        $role = Role::create($request->toArray());
+
+        $role = Role::create(['guard_name' => 'api', 'name' => $request->name]);
+      
         // $permission = Permission::create(['name' => 'edit articles']);
         foreach ($request->permissions as $permission) {
             $role->givePermissionTo($permission);
