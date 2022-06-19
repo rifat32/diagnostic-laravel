@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\Prescribtion;
 use App\Models\Product;
@@ -15,40 +16,42 @@ trait PrescriptionService
         $insetrableData = $request->validated();
 
 
-        DB::transaction(function () use(&$insetrableData) {
+        DB::transaction(function () use (&$insetrableData) {
+
             $prescription =   Prescribtion::create($insetrableData);
 
 
-            foreach($insetrableData["prescription"] as $medicine){
-      $prescription->medicines()->create([
-        "product_id"=> $medicine["product_id"],
-        "product_name"=> $medicine["product_name"],
-        "morning"=> $medicine['times']["morning"],
-        "afternoon"=> $medicine['times']['afternoon'],
-        "night"=> $medicine['times']["night"],
-        "end_time"=> $medicine["end_time"],
-             ]);
-
+            foreach ($insetrableData["prescription"] as $medicine) {
+                $prescription->medicines()->create([
+                    "product_id" => $medicine["product_id"],
+                    "product_name" => $medicine["product_name"],
+                    "morning" => $medicine['times']["morning"],
+                    "afternoon" => $medicine['times']['afternoon'],
+                    "night" => $medicine['times']["night"],
+                    "end_time" => $medicine["end_time"],
+                ]);
             }
 
-            foreach($insetrableData["tests"] as $test){
+            foreach ($insetrableData["tests"] as $test) {
                 $prescription->tests()->create([
-                  "name"=> $test["name"],
-             ]);
+                    "name" => $test["name"],
+                ]);
+            }
+            foreach ($insetrableData["cc"] as $cc) {
+                $prescription->cc()->create([
+                    "name" => $cc["name"],
+                    "value" => $cc["value"],
+                ]);
+            }
+            Appointment::where([
+                "id" => $insetrableData["appointment_id"]
+            ])
+            ->update([
+"status" => "Treated"
+            ]);
 
-                      }
-                      foreach($insetrableData["cc"] as $cc){
-                        $prescription->cc()->create([
-                          "name"=> $cc["name"],
-                          "value"=> $cc["value"],
-                     ]);
-
-                              }
-                              return response()->json(["prescription" => $prescription], 201);
+            return response()->json(["prescription" => $prescription], 201);
         });
-
-
-
     }
     public function updatePatientService($request)
     {
@@ -78,16 +81,14 @@ trait PrescriptionService
             "data" => $prescriptions
         ], 200);
     }
-    public function getSinglePrescriptionService($id,$request)
+    public function getSinglePrescriptionService($id, $request)
     {
         $prescriptions =   Prescribtion::with("patient")->where([
-"id" => $id
+            "id" => $id
         ])
             ->first();
         return response()->json([
             "data" => $prescriptions
         ], 200);
     }
-
-
 }

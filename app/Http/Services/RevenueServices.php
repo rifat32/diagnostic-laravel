@@ -7,6 +7,7 @@ use App\Models\Revenue;
 use Illuminate\Support\Facades\DB;
 use App\Http\Utils\TransactionUtils;
 use App\Models\CreditNote;
+use App\Models\Prescribtion;
 use Illuminate\Support\Carbon;
 
 trait RevenueServices
@@ -97,7 +98,8 @@ trait RevenueServices
         for ($i = 0; $i <= 30; $i++) {
             $revenueTotalAmount = Revenue::whereDate('created_at', Carbon::today()->subDay($i))->where(["status" => 1])->sum("amount");
             $creditNoteTotalAmount = CreditNote::whereDate('created_at', Carbon::today()->subDay($i))->where(["status" => 1])->sum("amount");
-            $data[$i]["amount"] = $revenueTotalAmount + $creditNoteTotalAmount;
+            $madicalPayment = Prescribtion::whereDate('created_at', Carbon::today()->subDay($i))->sum("fees");
+            $data[$i]["amount"] = $revenueTotalAmount + $creditNoteTotalAmount + $madicalPayment;
             $data[$i]["date"] = Carbon::today()->subDay($i);
         }
         return response()->json($data, 200);

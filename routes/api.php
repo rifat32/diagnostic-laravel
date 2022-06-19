@@ -70,7 +70,7 @@ Route::post('/v1.0/appointments', [AppointmentController::class, "createAppointm
 Route::delete('/v1.0/appointments/{id}', [AppointmentController::class, "deleteAppointment"]);
 Route::put('/v1.0/appointments', [AppointmentController::class, "updateAppointment"]);
 Route::get('/v1.0/appointments', [AppointmentController::class, "getAppointments"]);
-
+Route::get('/v1.0/appointments/{id}', [AppointmentController::class, "getAppointmentById"]);
 
 
 // Doctor
@@ -88,7 +88,7 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/patients/all', [PatientController::class, "getAllPatients"]);
 
   // Prescrotion]
-  Route::post('/v1.0/prescriptions', [PrescriptionController::class, "createPatient"]);
+  Route::post('/v1.0/prescriptions', [PrescriptionController::class, "createPrescription"]);
   Route::delete('/v1.0/patients/{id}', [PatientController::class, "deletePatient"]);
   Route::put('/v1.0/patients', [PatientController::class, "updatePatient"]);
   Route::get('/v1.0/prescriptions', [PrescriptionController::class, "getPrescription"]);

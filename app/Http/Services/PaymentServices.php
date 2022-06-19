@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Http\Utils\TransactionUtils;
 use App\Models\Bank;
 use App\Models\DebitNote;
+use App\Models\Prescribtion;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -95,6 +96,7 @@ trait PaymentServices
         for ($i = 0; $i <= 30; $i++) {
             $paymentTotalAmount = Payment::whereDate('created_at', Carbon::today()->subDay($i))->where(["status" => 1])->sum("amount");
             $debitNoteTotalAmount = DebitNote::whereDate('created_at', Carbon::today()->subDay($i))->where(["status" => 1])->sum("amount");
+
             $data[$i]["amount"] = $paymentTotalAmount + $debitNoteTotalAmount;
             $data[$i]["date"] = Carbon::today()->subDay($i);
         }

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PrescriptionController extends Controller
 {
     use PrescriptionService;
-    public function createPatient(PrescriptionRequest $request)
+    public function createPrescription(PrescriptionRequest $request)
     {
         return $this->createPrescriptionService($request);
     }

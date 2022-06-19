@@ -37,7 +37,21 @@ trait AppointmentService
 
     public function getAppointmentsService($request)
     {
-        $data['data'] =   Appointment::with("patient","doctor")->paginate(10);
+        $data['data'] =   Appointment::with("patient","doctor")
+        ->where(
+        "status", "!=",   "Treated"
+        )
+        ->paginate(10);
+        return response()->json($data, 200);
+    }
+    public function getAppointmentByIdService($id,$request)
+    {
+        $data['data'] = Appointment::with("patient","doctor")
+        ->where([
+            "id" => $id
+        ])
+        ->first();
+
         return response()->json($data, 200);
     }
 

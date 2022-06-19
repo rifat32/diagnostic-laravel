@@ -29,4 +29,10 @@ class AppointmentController extends Controller
 
         return $this->getAppointmentsService($request);
     }
+    public function getAppointmentById($id,Request $request)
+    {
+
+        return $this->getAppointmentByIdService($id,$request);
+    }
+
 }

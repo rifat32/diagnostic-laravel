@@ -27,9 +27,11 @@ class PrescriptionRequest extends FormRequest
             "description"=>"required",
             "note" => "required",
             "patient_id" =>"required",
+            "appointment_id" =>"required",
             "next_appointment"=>"required",
-            "fees"=> "required",
+            "fees"=> "required|numeric",
             "prescription"=>"array",
+            
             "cc"=>"array",
             "tests"=>"array",
         ];
