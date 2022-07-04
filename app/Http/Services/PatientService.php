@@ -22,7 +22,7 @@ trait PatientService
                 "address",
                 "phone",
                 "sex",
-                "age",
+                "birth_date",
                 "blood_group"
             )
         )->first();
@@ -41,6 +41,24 @@ trait PatientService
             "data" => $patients
         ], 200);
     }
+    public function getPatientByIdService($id,$request)
+    {
+        $patient =   Patient::
+        with(
+            "prescriptions.medicines",
+            "prescriptions.tests",
+            "prescriptions.cc",
+            "prescriptions.payments",
+        )
+        ->where([
+            "id" => $id
+        ])
+        ->first();
+        return response()->json([
+            "data" => $patient
+        ], 200);
+    }
+
     public function getAllPatientsService($request)
     {
         $patients =   Patient::all();

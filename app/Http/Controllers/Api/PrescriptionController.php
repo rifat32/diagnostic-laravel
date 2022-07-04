@@ -24,5 +24,10 @@ class PrescriptionController extends Controller
     {
         return $this->getSinglePrescriptionService($id,$request);
     }
+    public function addPayment(Request $request)
+    {
+        return $this->addPaymentService($request);
+    }
+
 
 }

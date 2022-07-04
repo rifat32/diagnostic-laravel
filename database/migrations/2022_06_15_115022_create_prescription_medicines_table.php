@@ -15,15 +15,15 @@ class CreatePrescriptionMedicinesTable extends Migration
     {
         Schema::create('prescription_medicines', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("prescription_id");
+            $table->unsignedBigInteger("prescription_id")->nullable();
             $table->foreign('prescription_id')->references('id')->on('prescribtions')->onDelete('cascade');
-            $table->unsignedBigInteger("product_id");
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->string("product_name");
-            $table->boolean("morning");
-            $table->boolean("afternoon");
-            $table->boolean("night");
-            $table->string("end_time");
+            $table->unsignedBigInteger("product_id")->nullable();
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->nullable();
+            $table->string("product_name")->nullable();
+            $table->boolean("morning")->nullable();
+            $table->boolean("afternoon")->nullable();
+            $table->boolean("night")->nullable();
+            $table->string("end_time")->nullable();
             $table->timestamps();
         });
     }

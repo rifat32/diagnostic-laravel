@@ -15,9 +15,9 @@ class CreatePrescriptionTestsTable extends Migration
     {
         Schema::create('prescription_tests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("prescription_id");
+            $table->unsignedBigInteger("prescription_id")->nullable();
             $table->foreign('prescription_id')->references('id')->on('prescribtions')->onDelete('cascade');
-            $table->string("name");
+            $table->string("name")->nullable();
             $table->timestamps();
         });
     }

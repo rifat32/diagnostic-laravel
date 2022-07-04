@@ -15,10 +15,10 @@ class CreatePrescriptionCCSTable extends Migration
     {
         Schema::create('prescription_c_c_s', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("prescription_id");
+            $table->unsignedBigInteger("prescription_id")->nullable();
             $table->foreign('prescription_id')->references('id')->on('prescribtions')->onDelete('cascade');
-            $table->string("name");
-            $table->string("value");
+            $table->string("name")->nullable();
+            $table->string("value")->nullable();
             $table->timestamps();
         });
     }

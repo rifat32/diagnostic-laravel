@@ -12,11 +12,15 @@ class Prescribtion extends Model
         "patient_id",
         "description",
         "note",
+        "patient_history",
         "next_appointment",
         "fees",
+        'medical_history',
+        "appointment_id"
     ];
     protected $casts = [
         'patient_id' => 'integer',
+        'appointment_id' => 'integer',
     ];
 
     public function patient()
@@ -34,5 +38,9 @@ class Prescribtion extends Model
     public function cc()
     {
         return $this->hasMany(PrescriptionCC::class, 'prescription_id', 'id');
+    }
+    public function payments()
+    {
+        return $this->hasMany(PrescriptionPayment::class, 'prescription_id', 'id');
     }
 }

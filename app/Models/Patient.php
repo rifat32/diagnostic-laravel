@@ -15,7 +15,12 @@ class Patient extends Model
         "address",
         "phone",
         "sex",
-        "age",
+        "birth_date",
         "blood_group"
     ];
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescribtion::class, 'patient_id', 'id')->latest();
+    }
+
 }

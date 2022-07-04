@@ -29,7 +29,7 @@ class PatientRequest extends FormRequest
             "address" => "required",
             "phone" => "required",
             "sex" => "required",
-            "age" => "required",
+            "birth_date" => "required",
             "blood_group" => "required",
 
         ];

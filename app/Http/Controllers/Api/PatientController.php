@@ -31,6 +31,12 @@ class PatientController extends Controller
 
         return $this->getPatientsService($request);
     }
+    public function getPatientById($id,Request $request)
+    {
+
+        return $this->getPatientByIdService($id,$request);
+    }
+
     public function getAllPatients(Request $request)
     {
 

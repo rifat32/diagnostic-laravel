@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\Prescribtion;
+use App\Models\PrescriptionPayment;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Catch_;
@@ -16,7 +17,24 @@ trait PrescriptionService
         $insetrableData = $request->validated();
 
 
-        DB::transaction(function () use (&$insetrableData) {
+     return   DB::transaction(function () use (&$insetrableData) {
+
+
+        $appointment =     Appointment::where([
+                "id" => $insetrableData["appointment_id"]
+            ])
+->first();
+if($appointment->status == "treated"){
+return response()->json([
+    "message" => "Already treated"
+],409);
+
+} else {
+    $appointment->status = "treated";
+    $appointment->save();
+}
+
+
 
             $prescription =   Prescribtion::create($insetrableData);
 
@@ -43,15 +61,24 @@ trait PrescriptionService
                     "value" => $cc["value"],
                 ]);
             }
-            Appointment::where([
-                "id" => $insetrableData["appointment_id"]
-            ])
-            ->update([
-"status" => "Treated"
-            ]);
 
-            return response()->json(["prescription" => $prescription], 201);
+            $data["invoice"] = view("prescription.invoice", [
+                "prescription" => $prescription
+            ])->render();
+            return response()->json([
+                "prescription" => $prescription,
+                "invoice" => $data["invoice"]
+        ], 201);
         });
+    }
+
+     public function addPaymentService($request)
+    {
+    $data["data"] =  PrescriptionPayment::create([
+        "prescription_id" => $request->prescription_id,
+        "amount" =>  $request->amount,
+       ]);
+       return response()->json($data, 201);
     }
     public function updatePatientService($request)
     {
@@ -76,7 +103,7 @@ trait PrescriptionService
 
     public function getPrescriptionService($request)
     {
-        $prescriptions =   Prescribtion::with("patient")->paginate(10);
+        $prescriptions =   Prescribtion::with("patient","payments")->paginate(10);
         return response()->json([
             "data" => $prescriptions
         ], 200);

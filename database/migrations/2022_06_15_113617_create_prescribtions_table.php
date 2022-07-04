@@ -15,12 +15,18 @@ class CreatePrescribtionsTable extends Migration
     {
         Schema::create('prescribtions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("patient_id");
+            $table->unsignedBigInteger("patient_id")->nullable();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->text("description");
-            $table->text("note");
-            $table->date("next_appointment");
-            $table->string("fees");
+            $table->unsignedBigInteger("appointment_id");
+            $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
+            $table->text("description")->nullable();
+            $table->text("note")->nullable();
+            $table->text("patient_history")->nullable();
+
+            $table->date("next_appointment")->nullable();
+            $table->string("fees")->nullable();
+            $table->text("medical_history")->nullable();
+
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class CreatePatientsTable extends Migration
             $table->string("address");
             $table->string("phone");
             $table->string("sex");
-            $table->string("age");
+            $table->string("birth_date");
             $table->string("blood_group");
             $table->softDeletes();
             $table->timestamps();

@@ -85,7 +85,8 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::delete('/v1.0/patients/{id}', [PatientController::class, "deletePatient"]);
     Route::put('/v1.0/patients', [PatientController::class, "updatePatient"]);
     Route::get('/v1.0/patients', [PatientController::class, "getPatients"]);
-    Route::get('/v1.0/patients/all', [PatientController::class, "getAllPatients"]);
+    Route::get('/v1.0/patients/{id}', [PatientController::class, "getPatientById"]);
+    Route::get('/v1.0/patients/all/list', [PatientController::class, "getAllPatients"]);
 
   // Prescrotion]
   Route::post('/v1.0/prescriptions', [PrescriptionController::class, "createPrescription"]);
@@ -93,6 +94,8 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
   Route::put('/v1.0/patients', [PatientController::class, "updatePatient"]);
   Route::get('/v1.0/prescriptions', [PrescriptionController::class, "getPrescription"]);
   Route::get('/v1.0/prescriptions/{id}', [PrescriptionController::class, "getSinglePrescription"]);
+  Route::post('/v1.0/prescription-payment', [PrescriptionController::class, "addPayment"]);
+
 
 
 

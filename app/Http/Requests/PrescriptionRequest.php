@@ -24,16 +24,18 @@ class PrescriptionRequest extends FormRequest
     public function rules()
     {
         return [
-            "description"=>"required",
-            "note" => "required",
+            "description"=>"nullable",
+            "note" => "nullable",
+            "patient_history" => 'nullable',
             "patient_id" =>"required",
             "appointment_id" =>"required",
-            "next_appointment"=>"required",
-            "fees"=> "required|numeric",
+            "next_appointment"=>"nullable",
+            "fees"=> "numeric|nullable",
             "prescription"=>"array",
-            
+
             "cc"=>"array",
             "tests"=>"array",
+            "medical_history"=>"nullable|string"
         ];
     }
 }
