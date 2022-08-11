@@ -44,6 +44,17 @@ trait AppointmentService
         ->paginate(10);
         return response()->json($data, 200);
     }
+    public function searchAppointmentByDateService($from,$to,$request)
+    {
+        $data['data'] =   Appointment::with("patient","doctor")
+        ->where(
+        "status", "!=",   "Treated"
+        )
+        ->whereBetween('created_at', [$from, $to])
+        ->paginate(10);
+        return response()->json($data, 200);
+    }
+
     public function getAppointmentByIdService($id,$request)
     {
         $data['data'] = Appointment::with("patient","doctor")

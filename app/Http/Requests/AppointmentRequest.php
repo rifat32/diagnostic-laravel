@@ -24,11 +24,11 @@ class AppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            "date" => "required",
-            "remarks" => "required",
-            "status" => "required",
-            "doctor_id" => "required",
-            "patient_id" => "required",
+            "date" => "nullable",
+            "remarks" => "nullable",
+            "status" => "nullable",
+            "doctor_id" => "nullable",
+            "patient_id" => "nullable",
         ];
     }
 }

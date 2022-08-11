@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ServiceRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Services\ProductServices;
@@ -13,9 +14,14 @@ class ProductController extends Controller
     use ProductServices;
     public function createProduct(ProductRequest $request)
     {
-
         return $this->createProductService($request);
     }
+    public function createService(ServiceRequest $request)
+    {
+
+        return $this->createSeviceService($request);
+    }
+
     public function updateProduct(ProductRequest $request)
     {
 

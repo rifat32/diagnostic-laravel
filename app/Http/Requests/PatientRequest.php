@@ -24,13 +24,13 @@ class PatientRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required",
-            "email" => "required",
-            "address" => "required",
-            "phone" => "required",
-            "sex" => "required",
-            "birth_date" => "required",
-            "blood_group" => "required",
+            "name" => "nullable",
+            "email" => "nullable",
+            "address" => "nullable",
+            "phone" => "nullable",
+            "sex" => "nullable",
+            "birth_date" => "nullable",
+            "blood_group" => "nullable",
 
         ];
     }

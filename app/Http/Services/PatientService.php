@@ -41,6 +41,17 @@ trait PatientService
             "data" => $patients
         ], 200);
     }
+
+    public function searchPatientByDateService($from,$to,$request)
+    {
+        $patients =   Patient::
+        whereBetween('created_at', [$from, $to])
+        ->paginate(10);
+        return response()->json([
+            "data" => $patients
+        ], 200);
+    }
+
     public function getPatientByIdService($id,$request)
     {
         $patient =   Patient::

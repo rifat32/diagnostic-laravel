@@ -31,6 +31,12 @@ class PatientController extends Controller
 
         return $this->getPatientsService($request);
     }
+    public function searchPatientByDate($from,$to,Request $request)
+    {
+
+        return $this->searchPatientByDateService($from,$to,$request);
+    }
+
     public function getPatientById($id,Request $request)
     {
 

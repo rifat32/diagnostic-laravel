@@ -24,10 +24,10 @@ class DoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required",
-            "email" => "required",
-            "address" => "required",
-            "phone" => "required",
+            "name" => "nullable",
+            "email" => "nullable",
+            "address" => "nullable",
+            "phone" => "nullable",
         ];
     }
 }

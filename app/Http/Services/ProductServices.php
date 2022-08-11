@@ -11,6 +11,11 @@ trait ProductServices
         $product =   Product::create($request->all());
         return response()->json(["product" => $product], 201);
     }
+    public function createSeviceService($request)
+    {
+        $product =  Product::create($request->all());
+        return response()->json(["product" => $product], 201);
+    }
     public function updateProductService($request)
     {
 
@@ -21,7 +26,7 @@ trait ProductServices
                 "category",
                 "sku",
                 "price",
-                "wing_id",
+
             )
         )->with("wing")->first();
         return response()->json(["product" => $product], 200);
@@ -34,16 +39,27 @@ trait ProductServices
 
     public function getProductsService($request)
     {
-        $products =   Product::with("wing")->paginate(10);
+        $products =  new Product();
+        if(!empty($request->type)){
+            $products =   $products->where("type",$request->type);
+        } else {
+            $products =   $products->where("type","product");
+        }
+        $products =     $products->paginate(10);
         return response()->json([
             "products" => $products
         ], 200);
     }
     public function searchProductByNameService($request)
     {
-        $product =   Product::where([
-            "name" => $request->search
-        ])->with("wing")->first();
+        $product =   Product::where(function($query) use ($request){
+            $query->where("name", "like", "%" . $request->search . "%");
+            $query->orWhere("sku", "like", "%" . $request->search . "%");
+        })
+        ->take(5)
+        ->get();
+
+
         if (!$product) {
             return response()->json([
                 "message" => "No product is found"

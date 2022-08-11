@@ -16,14 +16,8 @@ class Bill extends Model
         "category",
         "order_number",
         "discount_apply",
-        "wing_id",
     ];
 
-    protected $casts = [
-        '"wing_id"' => 'integer',
-    ];
-    public function wing()
-    {
-        return $this->hasOne(Wing::class, 'id', 'wing_id')->withTrashed();
-    }
+
+
 }

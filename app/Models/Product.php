@@ -15,11 +15,10 @@ class Product extends Model
         "category",
         "sku",
         "price",
-        "wing_id",
+        "type"
     ];
     protected $casts = [
-        'price' => 'integer',
-        "wing_id" => "integer",
+        'price' => 'integer'
     ];
 
 

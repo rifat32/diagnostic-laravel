@@ -16,10 +16,12 @@ use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WingController;
 use App\Http\Controllers\Api\CharOfAccountController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\LabReportTemplateController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\PrescriptionController;
+use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\SetUpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,8 @@ Route::middleware('auth:api')->get('/v1.0/user', function (Request $request) {
         200
     );
 });
+
+
 Route::post('/v1.0/login', [AuthController::class, "login"]);
 Route::post('/v1.0/register', [AuthController::class, "register"]);
 // protected routes
@@ -54,6 +58,11 @@ Route::middleware(['auth:api'])->group(function () {
     // Route::get('/v1.0/setup', [SetUpController::class, "setUp"]);
     Route::post('/v1.0/logout', [AuthController::class, "logout"]);
 
+
+
+
+// Dashboard
+Route::get('/v1.0/get-dashboard-info', [DashboardController::class, "getDashboardReport"]);
 
 
 // Doctor
@@ -67,10 +76,15 @@ Route::get('/v1.0/report-templates/all', [LabReportTemplateController::class, "g
 
     // Appointment
 Route::post('/v1.0/appointments', [AppointmentController::class, "createAppointment"]);
+
 Route::delete('/v1.0/appointments/{id}', [AppointmentController::class, "deleteAppointment"]);
+
 Route::put('/v1.0/appointments', [AppointmentController::class, "updateAppointment"]);
+
 Route::get('/v1.0/appointments', [AppointmentController::class, "getAppointments"]);
+
 Route::get('/v1.0/appointments/{id}', [AppointmentController::class, "getAppointmentById"]);
+Route::get('/v1.0/appointments/date/{from}/{to}', [AppointmentController::class, "searchAppointmentByDate"]);
 
 
 // Doctor
@@ -80,6 +94,8 @@ Route::put('/v1.0/doctors', [DoctorController::class, "updateDoctor"]);
 Route::get('/v1.0/doctors', [DoctorController::class, "getDoctors"]);
 Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
 
+
+
     // Patient
     Route::post('/v1.0/patients', [PatientController::class, "createPatient"]);
     Route::delete('/v1.0/patients/{id}', [PatientController::class, "deletePatient"]);
@@ -87,29 +103,58 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::get('/v1.0/patients', [PatientController::class, "getPatients"]);
     Route::get('/v1.0/patients/{id}', [PatientController::class, "getPatientById"]);
     Route::get('/v1.0/patients/all/list', [PatientController::class, "getAllPatients"]);
+    Route::get('/v1.0/patients/date/{from}/{to}', [PatientController::class, "searchPatientByDate"]);
 
-  // Prescrotion]
+
+
+
+  // Prescrotion
   Route::post('/v1.0/prescriptions', [PrescriptionController::class, "createPrescription"]);
-  Route::delete('/v1.0/patients/{id}', [PatientController::class, "deletePatient"]);
-  Route::put('/v1.0/patients', [PatientController::class, "updatePatient"]);
+  Route::delete('/v1.0/prescriptions/{id}', [PrescriptionController::class, "deletePrescription"]);
+  Route::put('/v1.0/prescriptions', [PrescriptionController::class, "updatePrescription"]);
   Route::get('/v1.0/prescriptions', [PrescriptionController::class, "getPrescription"]);
   Route::get('/v1.0/prescriptions/{id}', [PrescriptionController::class, "getSinglePrescription"]);
   Route::post('/v1.0/prescription-payment', [PrescriptionController::class, "addPayment"]);
+  Route::get('/v1.0/prescriptions/date/{from}/{to}', [PrescriptionController::class, "searchPrescriptionByDate"]);
 
 
 
-
+  Route::get('/v1.0/prescriptions/get/invoice/{id}',
+  [PrescriptionController::class, "getPrescriptionInvoice"]);
 
 
 
 
     // products
     Route::post('/v1.0/products', [ProductController::class, "createProduct"]);
+    Route::post('/v1.0/services', [ProductController::class, "createService"]);
     Route::delete('/v1.0/products/{id}', [ProductController::class, "deleteProduct"]);
     Route::put('/v1.0/products', [ProductController::class, "updateProduct"]);
     Route::get('/v1.0/products', [ProductController::class, "getProducts"]);
     Route::get('/v1.0/products/search/{search}', [ProductController::class, "searchProductByName"]);
     Route::get('/v1.0/products/{id}', [ProductController::class, "getProductById"]);
+
+
+
+ // Appointment
+ Route::post('/v1.0/sales', [SaleController::class, "createSales"]);
+
+ Route::delete('/v1.0/sales/{id}', [SaleController::class, "deleteSales"]);
+
+ Route::put('/v1.0/sales', [SaleController::class, "updateSales"]);
+
+ Route::get('/v1.0/sales', [SaleController::class, "getSales"]);
+
+ Route::get('/v1.0/sales/{id}', [SaleController::class, "getSalesById"]);
+ Route::get('/v1.0/sales/date/{from}/{to}', [SaleController::class, "searchSalesByDate"]);
+
+ Route::post('/v1.0/sale-payment', [SaleController::class, "addSalePayment"]);
+
+
+
+
+
+
     // requisitions
     Route::post('/v1.0/requisitions', [RequisitionController::class, "createRequisition"]);
     Route::get('/v1.0/requisitions', [RequisitionController::class, "getRequisitions"]);

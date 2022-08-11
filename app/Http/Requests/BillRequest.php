@@ -30,7 +30,7 @@ class BillRequest extends FormRequest
             "category" => "required",
             "order_number" => "required",
             "discount_apply" => "required",
-            "wing_id" => "required",
+
         ];
     }
 }

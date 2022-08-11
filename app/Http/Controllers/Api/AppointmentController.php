@@ -29,6 +29,12 @@ class AppointmentController extends Controller
 
         return $this->getAppointmentsService($request);
     }
+
+    public function searchAppointmentByDate($from,$to,Request $request)
+    {
+        return $this->searchAppointmentByDateService($from,$to,$request);
+    }
+
     public function getAppointmentById($id,Request $request)
     {
 

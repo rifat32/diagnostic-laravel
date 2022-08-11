@@ -55,6 +55,225 @@
     @endforeach
 </div>
 <div class="row">
+    <h3 class="m-0 p-0">Patient History</h3>
+
+    <p class="p-0 m-0">{{$prescription->patient_history}}</p>
+
+</div>
+<div class="row">
+    <h3 class="m-0 p-0">Medical History</h3>
+@if ($prescription->medical_history)
+@php
+   $medical_history = json_decode($prescription->medical_history);
+@endphp
+@if ($medical_history->undergoing_treatment)
+<p class="p-0 m-0">(1) Are you undergoing any medical treatment at present? <br>
+
+Ans: Yes
+</p>
+
+@endif
+
+<p class="p-0 m-0"> Do you have, or have you had any of the following? <br>
+Ans:     <div class="row">
+@foreach ($medical_history->diseases as $diseases)
+@if($diseases->checked)
+<div className="col-print-6">
+<div className="form-check" >
+<input
+className="form-check-input"
+type="checkbox"
+name="female"
+checked
+/>
+
+<label
+className="form-check-label"
+>
+
+{{$diseases->name}}
+</label>
+</div>
+</div>
+@endif
+
+
+@endforeach
+</div>
+
+
+</p>
+<p class="p-0 m-0"> Have You suffered allergy or other reactions (Rash, Itchiness etc) to: <br>
+Ans: <div class="row">
+@foreach ($medical_history->allergies as $allergies)
+@if($allergies->checked)
+<div className="col-print-6">
+<div className="form-check" >
+<input
+className="form-check-input"
+type="checkbox"
+name="female"
+checked
+/>
+
+<label
+className="form-check-label"
+>
+
+{{$allergies->name}}
+</label>
+</div>
+</div>
+@endif
+
+
+@endforeach
+</div>
+
+
+
+</p>
+@if ($medical_history->local_anaesthetics)
+<p class="p-0 m-0"> Have you ever had any adverse effects from local anaesthetics? <br>
+
+Ans: yes
+</p>
+
+
+@endif
+@if ($medical_history->prolonged_bleeding)
+<p class="p-0 m-0">	 Have you ever experienced unusually prononged bleeding after injury or tooth extraction? <br>
+Ans: yes
+</p>
+@endif
+@if ($medical_history->penicillin_given)
+<p class="p-0 m-0">	 Have you ever been given penicillin? <br>
+
+Ans:
+yes
+
+</p>
+
+@endif
+@if ($medical_history->taking_medicines)
+<p class="p-0 m-0">	 Are you taking any medicines,tablets, injections (etc.) at present? <br>
+
+Ans:  yes
+
+</p>
+<p class="p-0 m-0">
+If yes can you please indicate the nature of this medication? <br>
+
+Ans: {{($medical_history->nature_of_medication)}}
+
+</p>
+@endif
+
+
+
+<p class="p-0 m-0"> Have you been treated with any of the following in the past 5 year:? <br>
+Ans:
+<div class="row">
+
+    @foreach ($medical_history->treated as $treated)
+    @if($treated->checked)
+    <div className="col-print-6">
+        <div className="form-check" >
+   <input
+       className="form-check-input"
+       type="checkbox"
+       name="female"
+       checked
+   />
+
+   <label
+       className="form-check-label"
+     >
+
+     {{$treated->name}}
+   </label>
+</div>
+        </div>
+   @endif
+
+
+    @endforeach
+
+</div>
+
+
+</p>
+@if ($medical_history->recieved_radiotherapy)
+<p class="p-0 m-0">	(9) Have you ever recieved radioTherapy? <br>
+
+Ans:  yes
+
+</p>
+@endif
+
+@if ($medical_history->smoke)
+<p class="p-0 m-0">	 (10) Do you smoke?<br>
+Ans: yes
+</p>
+<p class="p-0 m-0">
+If yes how much on average per day? <br>
+
+Ans: {{($medical_history->smoke_times)}}
+
+</p>
+@endif
+
+
+
+<p class="p-0 m-0">(11) For female Patient? <br>
+Ans:
+<div class="row">
+    @foreach ($medical_history->female as $female)
+    @if($female->checked)
+    <div className="col-print-6">
+        <div className="form-check" >
+   <input
+       className="form-check-input"
+       type="checkbox"
+       name="female"
+    checked
+   />
+
+   <label
+       className="form-check-label"
+     >
+
+     {{$female->name}}
+   </label>
+</div>
+        </div>
+   @endif
+
+
+    @endforeach
+</div>
+
+</p>
+@if ($medical_history->other_information)
+<p class="p-0 m-0">
+ Please add any other information or comments on your medical history below<br>
+
+Ans: {{($medical_history->other_information)}}
+
+</p>
+@endif
+
+
+
+@endif
+
+
+
+
+
+
+</div>
+<div class="row">
     <h3 class="m-0 p-0">Medicines:</h3>
     <div class="row d-flex justify-content-between">
     @foreach ($prescription->medicines as  $medicines)
@@ -109,219 +328,7 @@
             <p class="p-0 m-0">{{$prescription->note}}</p>
 
         </div>
-        <div class="row">
-            <h3 class="m-0 p-0">Patient History</h3>
 
-            <p class="p-0 m-0">{{$prescription->patient_history}}</p>
-
-        </div>
-        <div class="row">
-            <h3 class="m-0 p-0">Medical History</h3>
-       @if ($prescription->medical_history)
-       @php
-           $medical_history = json_decode($prescription->medical_history);
-       @endphp
-  <p class="p-0 m-0">(1) Are you undergoing any medical treatment at present? <br>
-
-    Ans: @if ($medical_history->undergoing_treatment)
-    yes
-    @else
-    no
-    @endif
-</p>
-<p class="p-0 m-0">(2) Do you have, or have you had any of the following? <br>
-Ans:     <div class="row">
-    @foreach ($medical_history->diseases as $diseases)
-    <div className="col-print-6">
-        <div className="form-check" >
-   <input
-       className="form-check-input"
-       type="checkbox"
-       name="female"
-       @if($diseases->checked)
-      checked
-     @endif
-   />
-
-   <label
-       className="form-check-label"
-     >
-
-     {{$diseases->name}}
-   </label>
-</div>
-        </div>
-
-    @endforeach
-</div>
-
-
-</p>
-<p class="p-0 m-0">(3) Have You suffered allergy or other reactions (Rash, Itchiness etc) to: <br>
-  Ans: <div class="row">
-    @foreach ($medical_history->allergies as $allergies)
-    <div className="col-print-6">
-        <div className="form-check" >
-   <input
-       className="form-check-input"
-       type="checkbox"
-       name="female"
-       @if($allergies->checked)
-      checked
-     @endif
-   />
-
-   <label
-       className="form-check-label"
-     >
-
-     {{$allergies->name}}
-   </label>
-</div>
-        </div>
-
-    @endforeach
-</div>
-
-
-
-    </p>
-
-    <p class="p-0 m-0">(4) Have you ever had any adverse effects from local anaesthetics? <br>
-
-        Ans: @if ($medical_history->local_anaesthetics)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">	(5) Have you ever experienced unusually prononged bleeding after injury or tooth extraction? <br>
-
-        Ans: @if ($medical_history->prolonged_bleeding)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">	(6) Have you ever experienced unusually prononged bleeding after injury or tooth extraction? <br>
-
-        Ans: @if ($medical_history->penicillin_given)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">	(7) Are you taking any medicines,tablets, injections (etc.) at present? <br>
-
-        Ans: @if ($medical_history->taking_medicines)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">
-        If yes can you please indicate the nature of this medication? <br>
-
-        Ans: {{($medical_history->nature_of_medication)}}
-
-    </p>
-
-    <p class="p-0 m-0">(8) Have you been treated with any of the following in the past 5 year:? <br>
-        Ans:
-        <div class="row">
-            @foreach ($medical_history->treated as $treated)
-            <div className="col-print-6">
-                <div className="form-check" >
-           <input
-               className="form-check-input"
-               type="checkbox"
-               name="female"
-               @if($treated->checked)
-              checked
-             @endif
-           />
-
-           <label
-               className="form-check-label"
-             >
-
-             {{$treated->name}}
-           </label>
-        </div>
-                </div>
-
-            @endforeach
-        </div>
-
-
-    </p>
-    <p class="p-0 m-0">	(9) Have you ever recieved radioTherapy? <br>
-
-        Ans: @if ($medical_history->recieved_radiotherapy)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">	 (10) Do you smoke?<br>
-
-        Ans: @if ($medical_history->smoke)
-        yes
-        @else
-        no
-        @endif
-    </p>
-    <p class="p-0 m-0">
-        If yes how much on average per day? <br>
-
-        Ans: {{($medical_history->smoke_times)}}
-
-    </p>
-
-    <p class="p-0 m-0">(11) For female Patient? <br>
-        Ans:
-        <div class="row">
-            @foreach ($medical_history->female as $female)
-            <div className="col-print-6">
-                <div className="form-check" >
-           <input
-               className="form-check-input"
-               type="checkbox"
-               name="female"
-               @if($female->checked)
-              checked
-             @endif
-           />
-
-           <label
-               className="form-check-label"
-             >
-
-             {{$female->name}}
-           </label>
-       </div>
-                </div>
-
-            @endforeach
-        </div>
-
-    </p>
-    <p class="p-0 m-0">
-        (12) Please add any other information or comments on your medical history below<br>
-
-        Ans: {{($medical_history->other_information)}}
-
-    </p>
-
-
-       @endif
-
-
-
-
-
-
-        </div>
         <div class="row">
             <h3 class="m-0 p-0">Fee</h3>
 

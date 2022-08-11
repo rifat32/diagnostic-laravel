@@ -21,7 +21,6 @@ class CreateBillsTable extends Migration
             $table->string("category");
             $table->integer("order_number");
             $table->boolean("discount_apply");
-            $table->integer("wing_id");
             $table->timestamps();
         });
     }
