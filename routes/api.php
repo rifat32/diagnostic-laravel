@@ -101,6 +101,8 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
     Route::delete('/v1.0/patients/{id}', [PatientController::class, "deletePatient"]);
     Route::put('/v1.0/patients', [PatientController::class, "updatePatient"]);
     Route::get('/v1.0/patients', [PatientController::class, "getPatients"]);
+    Route::get('/v1.0/patients/get/main-patients', [PatientController::class, "getMainPatients"]);
+
     Route::get('/v1.0/patients/{id}', [PatientController::class, "getPatientById"]);
     Route::get('/v1.0/patients/all/list', [PatientController::class, "getAllPatients"]);
     Route::get('/v1.0/patients/date/{from}/{to}', [PatientController::class, "searchPatientByDate"]);
@@ -110,9 +112,17 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
 
   // Prescrotion
   Route::post('/v1.0/prescriptions', [PrescriptionController::class, "createPrescription"]);
+
   Route::delete('/v1.0/prescriptions/{id}', [PrescriptionController::class, "deletePrescription"]);
   Route::put('/v1.0/prescriptions', [PrescriptionController::class, "updatePrescription"]);
   Route::get('/v1.0/prescriptions', [PrescriptionController::class, "getPrescription"]);
+  Route::get('/v1.0/prescriptions/patient/{id}', [PrescriptionController::class, "getPrescriptionByPatient"]);
+
+
+
+
+  Route::get('/v1.0/prescriptions/get/due', [PrescriptionController::class, "getDuePrescription"]);
+
   Route::get('/v1.0/prescriptions/{id}', [PrescriptionController::class, "getSinglePrescription"]);
   Route::post('/v1.0/prescription-payment', [PrescriptionController::class, "addPayment"]);
   Route::get('/v1.0/prescriptions/date/{from}/{to}', [PrescriptionController::class, "searchPrescriptionByDate"]);
@@ -144,12 +154,13 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
  Route::put('/v1.0/sales', [SaleController::class, "updateSales"]);
 
  Route::get('/v1.0/sales', [SaleController::class, "getSales"]);
+ Route::get('/v1.0/sales/patient/{}', [SaleController::class, "getSalesByPatient"]);
 
  Route::get('/v1.0/sales/{id}', [SaleController::class, "getSalesById"]);
  Route::get('/v1.0/sales/date/{from}/{to}', [SaleController::class, "searchSalesByDate"]);
 
  Route::post('/v1.0/sale-payment', [SaleController::class, "addSalePayment"]);
-
+ Route::post('/v1.0/patient/sale-payment', [SaleController::class, "addPatientSalePayment"]);
 
 
 

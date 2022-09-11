@@ -8,6 +8,7 @@ trait ProductServices
 {
     public function createProductService($request)
     {
+        $request["type"] = "product";
         $product =   Product::create($request->all());
         return response()->json(["product" => $product], 201);
     }
@@ -52,7 +53,13 @@ trait ProductServices
     }
     public function searchProductByNameService($request)
     {
-        $product =   Product::where(function($query) use ($request){
+        $products =  new Product();
+        if(!empty($request->type)){
+            $products =   $products->where("type",$request->type);
+        } else {
+            $products =   $products->where("type","product");
+        }
+        $products =   $products->where(function($query) use ($request){
             $query->where("name", "like", "%" . $request->search . "%");
             $query->orWhere("sku", "like", "%" . $request->search . "%");
         })
@@ -60,13 +67,13 @@ trait ProductServices
         ->get();
 
 
-        if (!$product) {
+        if (!$products) {
             return response()->json([
                 "message" => "No product is found"
             ], 404);
         }
         return response()->json([
-            "product" => $product
+            "product" => $products
         ], 200);
     }
     public function getProductByIdService($request, $id)

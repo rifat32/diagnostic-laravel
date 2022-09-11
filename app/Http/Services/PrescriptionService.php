@@ -61,6 +61,12 @@ return response()->json([
                     "value" => $cc["value"],
                 ]);
             }
+            foreach ($insetrableData["oe"] as $oe) {
+                $prescription->oe()->create([
+                    "name" => $oe["name"],
+                    "value" => $oe["value"],
+                ]);
+            }
 
             $data["invoice"] = view("prescription.invoice", [
                 "prescription" => $prescription
@@ -78,8 +84,8 @@ return response()->json([
             collect($updatableData)->only([
                 "patient_id",
                 "description",
-                "note",
-                "patient_history",
+                "past_medical_history",
+                "drug_history",
                 "next_appointment",
                 "fees",
                 'medical_history',
@@ -92,6 +98,7 @@ return response()->json([
         $updated_prescription->medicines()->delete();
         $updated_prescription->tests()->delete();
         $updated_prescription->cc()->delete();
+        $updated_prescription->oe()->delete();
         foreach ($updatableData["prescription"] as $medicine) {
             $updated_prescription->medicines()->create([
                 "product_id" => $medicine["product_id"],
@@ -114,6 +121,12 @@ return response()->json([
                 "value" => $cc["value"],
             ]);
         }
+        foreach ($updatableData["oe"] as $oe) {
+            $updated_prescription->oe()->create([
+                "name" => $oe["name"],
+                "value" => $oe["value"],
+            ]);
+        }
 
         return response()->json(["data" => $updated_prescription], 200);
     }
@@ -121,11 +134,46 @@ return response()->json([
 
      public function addPaymentService($request)
     {
-    $data["data"] =  PrescriptionPayment::create([
-        "prescription_id" => $request->prescription_id,
-        "amount" =>  $request->amount,
-       ]);
-       return response()->json($data, 201);
+return DB::transaction(function ()use($request) {
+    $prescription = Prescribtion::where([
+        "id" => $request->prescription_id
+    ])
+    ->select(
+        "id",
+       "fees",
+       "payment_status",
+        DB::raw("SUM( (SELECT SUM(amount) FROM prescription_payments WHERE prescription_payments.prescription_id=prescribtions.id)) as paid"),
+
+    )
+    ->first();
+    
+    if($prescription->fees > $prescription->paid) {
+        if(($prescription->fees - $prescription->paid) >= $request->amount) {
+            $data["data"] =  PrescriptionPayment::create([
+                "prescription_id" => $request->prescription_id,
+                "amount" =>  $request->amount,
+               ]);
+               if(($prescription->fees - $prescription->paid) == $request->amount) {
+                $prescription->payment_status = "paid";
+                $prescription->save();
+               }
+        return response()->json($data, 201);
+
+        }else {
+            return response()->json([
+                "message" => "paying more than due " . ($prescription->fees - $prescription->paid)
+            ], 409);
+        }
+
+    }
+    return response()->json([
+        "message" => "Already paid"
+    ], 409);
+});
+
+
+
+
     }
     public function updatePatientService($request)
     {
@@ -142,9 +190,9 @@ return response()->json([
         )->first();
         return response()->json($data, 200);
     }
-    public function deletePatientService($request)
+    public function deletePrescriptionService($request)
     {
-        Patient::where(["id" => $request["id"]])->delete();
+        Prescribtion::where(["id" => $request["id"]])->delete();
         return response()->json(["ok" => true], 200);
     }
 
@@ -155,6 +203,32 @@ return response()->json([
             "data" => $prescriptions
         ], 200);
     }
+    public function getPrescriptionByPatientService($request,$id)
+    {
+        $prescriptions =   Prescribtion::with("patient","payments")
+        ->where([
+            "patient_id" => $id
+        ])
+        ->paginate(10);
+        return response()->json([
+            "data" => $prescriptions
+        ], 200);
+    }
+
+
+    public function getDuePrescriptionService($request)
+    {
+        $prescriptions =   Prescribtion::with("patient","payments")
+        ->where([
+            "payment_status" => "due"
+        ])
+        ->paginate(10);
+        return response()->json([
+            "data" => $prescriptions
+        ], 200);
+    }
+
+
     public function searchPrescriptionByDateService($from,$to,$request)
     {
         $prescriptions =   Prescribtion::with("patient","payments")
@@ -169,7 +243,7 @@ return response()->json([
 
     public function getSinglePrescriptionService($id, $request)
     {
-        $prescriptions =   Prescribtion::with("patient","medicines","tests","cc","payments")->where([
+        $prescriptions =   Prescribtion::with("patient","medicines","tests","cc","oe","payments")->where([
             "id" => $id
         ])
             ->first();

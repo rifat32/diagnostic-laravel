@@ -12,6 +12,7 @@ class Sale extends Model
     protected $fillable = [
         "sale_date",
         "status",
+        "payment_status",
         "patient_id",
         "doctor_id",
         "discount",

@@ -18,5 +18,8 @@ class SaleDetails extends Model
         'sale_id' => 'integer',
         'product_id' => 'integer'
     ];
-
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
 }

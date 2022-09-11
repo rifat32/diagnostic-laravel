@@ -17,6 +17,8 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->date("sale_date")->nullable();
             $table->string("status")->nullable();
+            $table->string("payment_status")->default("due");
+
             $table->unsignedBigInteger("patient_id")->nullable();
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->unsignedBigInteger("doctor_id")->nullable();

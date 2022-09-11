@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaleRequest;
+use App\Http\Requests\SaleUpdateRequest;
 use App\Http\Services\SaleService;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class SaleController extends Controller
     {
         return $this->createSalesService($request);
     }
-    public function updateSales(SaleRequest $request)
+    public function updateSales(SaleUpdateRequest $request)
     {
 
         return $this->updateSalesService($request);
@@ -29,6 +30,12 @@ class SaleController extends Controller
 
         return $this->getSalesService($request);
     }
+    public function getSalesByPatient(Request $request,$id)
+    {
+
+        return $this->getSalesByPatientService($request,$id);
+    }
+
 
     public function searchSalesByDate($from,$to,Request $request)
     {
@@ -46,5 +53,11 @@ class SaleController extends Controller
 
         return $this->addSalePaymentService($request);
     }
+    public function addPatientSalePayment(Request $request)
+    {
+
+        return $this->addPatientSalePaymentService($request);
+    }
+
 
 }

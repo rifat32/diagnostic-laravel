@@ -26,8 +26,8 @@ class PrescriptionUpdateRequest extends FormRequest
         return   [
             "id"=>"required",
             "description"=>"nullable",
-            "note" => "nullable",
-            "patient_history" => 'nullable',
+            "past_medical_history" => "nullable",
+            "drug_history" => 'nullable',
             "patient_id" =>"required",
             "appointment_id" =>"required",
             "next_appointment"=>"nullable",
@@ -35,6 +35,7 @@ class PrescriptionUpdateRequest extends FormRequest
             "prescription"=>"array",
 
             "cc"=>"array",
+            "oe"=>"array",
             "tests"=>"array",
             "medical_history"=>"nullable|string"
         ];

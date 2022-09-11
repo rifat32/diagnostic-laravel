@@ -20,14 +20,16 @@ class CreatePrescribtionsTable extends Migration
             $table->unsignedBigInteger("appointment_id");
             $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->text("description")->nullable();
-            $table->text("note")->nullable();
-            $table->text("patient_history")->nullable();
+            $table->text("past_medical_history")->nullable();
+            $table->text("drug_history")->nullable();
 
             $table->date("next_appointment")->nullable();
             $table->string("fees")->nullable();
             $table->text("medical_history")->nullable();
+            $table->string("payment_status")->default("due");
 
             $table->timestamps();
+
         });
     }
 

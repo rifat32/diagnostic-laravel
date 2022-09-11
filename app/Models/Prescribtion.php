@@ -11,12 +11,13 @@ class Prescribtion extends Model
     protected $fillable = [
         "patient_id",
         "description",
-        "note",
-        "patient_history",
+        "past_medical_history",
+        "drug_history",
         "next_appointment",
         "fees",
         'medical_history',
-        "appointment_id"
+        "appointment_id",
+        'payment_status',
     ];
     protected $casts = [
         'patient_id' => 'integer',
@@ -38,6 +39,10 @@ class Prescribtion extends Model
     public function cc()
     {
         return $this->hasMany(PrescriptionCC::class, 'prescription_id', 'id');
+    }
+    public function oe()
+    {
+        return $this->hasMany(PrescriptionOE::class, 'prescription_id', 'id');
     }
     public function payments()
     {

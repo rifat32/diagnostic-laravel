@@ -20,10 +20,24 @@ class PrescriptionController extends Controller
         return $this->updatePrescriptionService($request);
     }
 
+    public function deletePrescription(Request $request)
+    {
+        return $this->deletePrescriptionService($request);
+    }
     public function getPrescription(Request $request)
     {
         return $this->getPrescriptionService($request);
     }
+    public function getPrescriptionByPatient(Request $request,$id)
+    {
+        return $this->getPrescriptionByPatientService($request,$id);
+    }
+
+    public function getDuePrescription(Request $request)
+    {
+        return $this->getDuePrescriptionService($request);
+    }
+
 
     public function searchPrescriptionByDate($from,$to,Request $request)
     {
