@@ -18,24 +18,25 @@ class DashboardController extends Controller
     public function getDashboardReport(Request $request) {
         // prescription income
      $data["today_prescription_income"] = PrescriptionPayment::whereDate("created_at",Carbon::today())
-     ->sum("amount");
+     ->get()->sum("amount");
      $data["this_month_prescription_income"] = PrescriptionPayment::where(
         'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
     )
-     ->sum("amount");
-     $data["total_prescription_income"] = PrescriptionPayment::whereDate("created_at",Carbon::today())
-     ->sum("amount");
+    ->get() ->sum("amount");
+     $data["total_prescription_income"] = PrescriptionPayment::get()->sum("amount");
         // end prescription income
          // sale income
      $data["today_sale_income"] = SalePayment::whereDate("created_at",Carbon::today())
-     ->sum("paid_amount");
+     ->get()->sum("paid_amount");
+
      $data["this_month_sale_income"] = SalePayment::where(
         'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
     )
-     ->sum("paid_amount");
-     $data["total_sale_income"] = SalePayment::whereDate("created_at",Carbon::today())
-     ->sum("paid_amount");
+    ->get()->sum("paid_amount");
+
+     $data["total_sale_income"] = SalePayment::get()->sum("paid_amount");
         // end sale income
+
          // appointment
      $data["today_appointment"] = Appointment::whereDate("created_at",Carbon::today())
      ->get()->count();
@@ -43,8 +44,7 @@ class DashboardController extends Controller
         'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
     )
     ->get()->count();
-     $data["total_appointment"] = Appointment::whereDate("created_at",Carbon::today())
-     ->get()->count();
+     $data["total_appointment"] = Appointment::get()->count();
         // end appointment
 // patient
 $data["today_patient"] = Patient::whereDate("patients.created_at",Carbon::today())
@@ -66,8 +66,7 @@ $data["this_month_patient"] = Patient::where(
     ->where("sales.id","!=",NULL)
     ->orWhere("prescribtions.id","!=",NULL);
 })->groupBy('patients.id')->get()->count();
-$data["total_patient"] = Patient::whereDate("patients.created_at",Carbon::today())
-->leftJoin('prescribtions', 'patients.id', '=', 'prescribtions.patient_id')
+$data["total_patient"] = Patient::leftJoin('prescribtions', 'patients.id', '=', 'prescribtions.patient_id')
 ->leftJoin('sales', 'patients.id', '=', 'sales.patient_id')
 ->where(function ($query) {
     return $query
@@ -85,19 +84,17 @@ $data["total_patient"] = Patient::whereDate("patients.created_at",Carbon::today(
     'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
 )
 ->get()->count();
- $data["total_prescription"] = Prescribtion::whereDate("created_at",Carbon::today())
- ->get()->count();
+ $data["total_prescription"] = Prescribtion::get()->count();
     // end prescription
 
  // medical_history
  $data["today_patient_history"] = Prescribtion::whereDate("created_at",Carbon::today())
  ->where("medical_history","!=",NULL)->get()->count();
- $data["this_patient_history"] = Prescribtion::where(
+ $data["this_month_patient_history"] = Prescribtion::where(
     'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
 )
 ->where("medical_history","!=",NULL)->get()->count();
- $data["total_patient_history"] = Prescribtion::whereDate("created_at",Carbon::today())
- ->where("medical_history","!=",NULL)->get()->count();
+ $data["total_patient_history"] = Prescribtion::where("medical_history","!=",NULL)->get()->count();
     // end medical_history
 // treatment plan
 $data["today_sale"] = Sale::whereDate("created_at",Carbon::today())
@@ -106,8 +103,7 @@ $data["this_month_sale"] = Sale::where(
    'created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()
 )
 ->get()->count();
-$data["total_sale"] = Sale::whereDate("created_at",Carbon::today())
-->get()->count();
+$data["total_sale"] = Sale::get()->count();
    // end treatment plan
 
 
