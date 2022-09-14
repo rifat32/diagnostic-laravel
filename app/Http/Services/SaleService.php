@@ -124,43 +124,33 @@ trait SaleService
     public function addSalePaymentService($request)
     {
 $sale = Sale::where([
-    "id" => $request->sale_id
+    "id" => $request->sale_id,
+
 ])
-->select(
-    "id",
-
-    DB::raw("
-            (
-
-
-                (SUM(IF(sales.status = 'Confirmed', (SELECT SUM(amount) FROM sale_details WHERE sale_details.sale_id=sales.id), 0))
-                -
-                (
-                    SUM(sales.discount)
-                +
-                 SUM(IF(sales.status = 'Confirmed', (SELECT SUM(line_discount) FROM sale_details WHERE sale_details.sale_id=sales.id), 0))
-
-                 ))
-
-                 -
-
-                 SUM(IF(sales.status = 'Confirmed', (SELECT SUM(paid_amount) FROM sale_payments WHERE sale_payments.sale_id=sales.id), 0))
-
-            ) as total_due
 
 
 
-
-
-            "),
-)
 ->first();
 
-if($sale->total_due < $request->paid_amount){
+if($sale->status != "Confirmed") {
     return response()->json([
-      "message" =>  "greather than due"
+        "message" =>  "sell is not confirmed" . $sale->status
+      ], 409);
+}
+$let_sub_total = $sale->saleDetails->sum('amount');
+$let_discount = $sale->discount;
+$let_line_discount =  $sale->saleDetails->sum('line_discount');
+$let_paid_amount =  $sale->payments->sum('paid_amount');
+
+$let_total_due = ($let_sub_total - ($let_discount - $let_line_discount)) - $let_paid_amount;
+
+if(($let_total_due < $request->paid_amount)){
+    return response()->json([
+      "message" =>  "greather than due " . $let_total_due
     ], 409);
 }
+
+
 // return response()->json([
 //     "message" =>  $sale->total_due
 //   ], 409);
@@ -179,48 +169,27 @@ if($sale->total_due < $request->paid_amount){
             "payment_status"=>"due",
             "status"=>'Confirmed'
         ])
-        ->select(
-            "id",
-            "discount",
-            "payment_status",
-            DB::raw("
-            (
 
-
-                (SUM(IF(sales.status = 'Confirmed', (SELECT SUM(amount) FROM sale_details WHERE sale_details.sale_id=sales.id), 0))
-                -
-                (
-                    SUM(sales.discount)
-                +
-                 SUM(IF(sales.status = 'Confirmed', (SELECT SUM(line_discount) FROM sale_details WHERE sale_details.sale_id=sales.id), 0))
-
-                 ))
-
-                 -
-
-                 SUM(IF(sales.status = 'Confirmed', (SELECT SUM(paid_amount) FROM sale_payments WHERE sale_payments.sale_id=sales.id), 0))
-
-            ) as total_due
-
-
-
-
-
-            "),
-
-    )
         ->orderBy("sale_date")
+        ->groupBy("id")
         ->get();
 
 $let_total_due = 0;
-        foreach($due_sales as $due_sale){
-            $let_total_due += $due_sale->total_due;
+
+
+        foreach($due_sales as $sale){
+            $let_sub_total = $sale->saleDetails->sum('amount');
+            $let_discount = $sale->discount;
+            $let_line_discount =  $sale->saleDetails->sum('line_discount');
+            $let_paid_amount =  $sale->payments->sum('paid_amount');
+
+            $let_total_due += ($let_sub_total - (($let_discount?$let_discount:0) + ($let_line_discount?$let_line_discount:0))) - ($let_paid_amount?$let_paid_amount:0);
 
         }
 
         if($let_total_due < $request_amount){
             return response()->json([
-              "message" =>  "greather than due"
+              "message" =>  "greather than due bb" . $let_total_due
             ], 409);
         }
 

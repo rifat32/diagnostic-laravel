@@ -60,6 +60,10 @@ class PrescriptionController extends Controller
     {
         return $this->getPrescriptionInvoiceService($request,$id);
     }
+    public function addPatientPrescriptionPayment(Request $request)
+    {
+        return $this->addPatientPrescriptionPaymentService($request);
+    }
 
 
 

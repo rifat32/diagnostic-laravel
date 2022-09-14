@@ -22,5 +22,15 @@ class Patient extends Model
     {
         return $this->hasMany(Prescribtion::class, 'patient_id', 'id')->latest();
     }
-
+    // public function sales()
+    // {
+    //     return $this->hasMany(Sale::class, 'patient_id', 'id')->latest();
+    // }
+    public function sales()
+    {
+        return $this->hasMany(Sale::class, 'patient_id', 'id')
+        ->where([
+            "status" => "Confirmed"
+        ])->latest();
+    }
 }

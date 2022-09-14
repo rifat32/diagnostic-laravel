@@ -117,6 +117,9 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
   Route::put('/v1.0/prescriptions', [PrescriptionController::class, "updatePrescription"]);
   Route::get('/v1.0/prescriptions', [PrescriptionController::class, "getPrescription"]);
   Route::get('/v1.0/prescriptions/patient/{id}', [PrescriptionController::class, "getPrescriptionByPatient"]);
+  Route::post('/v1.0/patient/sale-payment', [SaleController::class, "addPatientSalePayment"]);
+  Route::post('/v1.0/patient/prescription-payment', [PrescriptionController::class, "addPatientPrescriptionPayment"]);
+
 
 
 
@@ -161,6 +164,7 @@ Route::get('/v1.0/doctors/all', [DoctorController::class, "getAllDoctors"]);
 
  Route::post('/v1.0/sale-payment', [SaleController::class, "addSalePayment"]);
  Route::post('/v1.0/patient/sale-payment', [SaleController::class, "addPatientSalePayment"]);
+
 
 
 

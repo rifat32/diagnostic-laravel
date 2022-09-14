@@ -146,7 +146,7 @@ return DB::transaction(function ()use($request) {
 
     )
     ->first();
-    
+
     if($prescription->fees > $prescription->paid) {
         if(($prescription->fees - $prescription->paid) >= $request->amount) {
             $data["data"] =  PrescriptionPayment::create([
@@ -264,4 +264,106 @@ return DB::transaction(function ()use($request) {
             "invoice" => $data["invoice"]
     ], 200);
     }
+
+
+    public function addPatientPrescriptionPaymentService($request)
+    {
+        $request_amount = $request->paid_amount;
+        $due_prescriptions = Prescribtion::where([
+            "patient_id" => $request->patient_id,
+            "payment_status"=>"due",
+
+        ])
+        ->select(
+            "id",
+            "payment_status",
+            "fees",
+            DB::raw("
+            (
+                SUM(fees)
+
+
+            )
+            as sum_fees
+
+            "),
+            DB::raw("
+            (
+                SUM(prescribtions.fees) -
+
+            SUM( (SELECT SUM(amount) FROM prescription_payments WHERE prescription_payments.prescription_id=prescribtions.id))
+            )
+            as total_due
+
+            "),
+
+    )
+->groupBy("id")
+->orderBy("created_at")
+        ->get();
+
+$let_total_due = 0;
+        foreach($due_prescriptions as $due_prescription){
+            $let_total_due += ($due_prescription->total_due?$due_prescription->total_due:($due_prescription->sum_fees));
+
+        }
+
+        if($let_total_due < $request_amount){
+            return response()->json([
+              "message" =>  "greather than due" . $let_total_due
+            ], 409);
+        }
+
+
+
+
+
+
+
+        foreach($due_prescriptions as $due_prescription){
+         
+
+          $total = $due_prescription->fees;
+
+
+          $paid = $due_prescription->payments->sum("amount");
+
+          $due = $total - $paid;
+          if(($due - $request_amount) > 0) {
+
+            $due_prescription->payments()->create([
+                "amount" => $request_amount
+            ]);
+            break;
+          }
+          elseif(($due - $request_amount) == 0){
+
+            $due_prescription->payments()->create([
+                "amount" => $request_amount
+            ]);
+            $due_prescription->payment_status = "paid";
+            $due_prescription->save();
+            break;
+          }
+          else {
+
+
+            $due_prescription->payments()->create([
+                "amount" => $due
+            ]);
+            $due_prescription->payment_status = "paid";
+            $due_prescription->save();
+            $request_amount -= $due;
+          }
+
+
+        }
+        // $data["data"] =  SalePayment::create([
+        //     "sale_id" => $request->sale_id,
+        //     "paid_amount" =>  $request->paid_amount,
+        //    ]);
+        return response()->json(["ok" => true], 200);
+           return response()->json($due_prescription, 404);
+    }
+
 }
