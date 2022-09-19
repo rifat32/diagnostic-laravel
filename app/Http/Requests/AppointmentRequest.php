@@ -27,8 +27,8 @@ class AppointmentRequest extends FormRequest
             "date" => "nullable",
             "remarks" => "nullable",
             "status" => "nullable",
-            "doctor_id" => "nullable",
-            "patient_id" => "nullable",
+            "doctor_id" => "required",
+            "patient_id" => "required",
             "problem" => "nullable",
         ];
     }

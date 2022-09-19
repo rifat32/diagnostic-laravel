@@ -13,6 +13,14 @@
     <title>Prescription</title>
     <style>
         @media print {
+.bullet{
+
+    display: list-item; /* This has to be "list-item"                                          */
+    margin-left : 1em;  /* If you use default list-style-position 'outside', you may need this */
+
+}
+
+
             .m-0 {
                 margin: 0;
             }
@@ -58,7 +66,7 @@
 
                 <div class="col-3"><p class="font2">age: {{ $age }}</p> </div>
                 <div class="col-3"> <p class="font2">sex: {{ $prescription->patient->sex }}</p></div>
-                <div class="col-3"> <p class="font2">date:{{$prescription->created_at}}</p> </div>
+                <div class="col-3"> <p class="font2">date:{{date("d/m/Y", strtotime($prescription->created_at))}}</p> </div>
             </div>
 
         </div>
@@ -67,7 +75,7 @@
             <div class="">
                 <h3 class="">CC:</h3>
                 @foreach ($prescription->cc as $cc)
-                    <p class="font1">{{ $cc->name }}: {{ $cc->value }}</p>
+                    <p class="font1 bullet">{{ $cc->name }}: {{ $cc->value }}</p>
                 @endforeach
             </div>
             {{-- <div class="">
@@ -82,12 +90,7 @@
                 <p class="">{{ $prescription->drug_history }}</p>
 
             </div>
-            <div class="">
-                <h3 class="">O/E:</h3>
-                @foreach ($prescription->oe as $oe)
-                    <p class="font1">{{ $oe->name }}: {{ $oe->value }}</p>
-                @endforeach
-            </div>
+
             <div class="">
                 <h3 class="">Investigations:</h3>
                 <div class="row">
@@ -95,14 +98,15 @@
                     @foreach ($prescription->tests as $tests)
 
                     @if ($tests->type == "xray")
-                    <p class="">{{ $tests->name }}</p>
+                    <p class="bullet">{{ $tests->name }}</p>
                     @endif
                     @endforeach
                     </div>
                     <div class="col-6">
                         @foreach ($prescription->tests as $tests)
+                       
                         @if ($tests->type == "blood")
-                        <p class="">{{ $tests->name }}</p>
+                        <p class="bullet">{{ $tests->name }}</p>
                         @endif
                     @endforeach
                     </div>
@@ -337,12 +341,14 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
        @if ($diseases->checked)
            <div class="col-4">
                <div class="form-check">
-                   <input class="form-check-input" type="checkbox" name="female" checked />
+                   {{-- <input class="form-check-input" type="checkbox" name="female" checked /> --}}
 
-                   <label class="form-check-label">
+                   {{-- <label class="form-check-label">
 
                        {{ $diseases->name }}
-                   </label>
+                   </label> --}}
+
+                   <p class="font1 bullet">{{$diseases->name}}</p>
                </div>
            </div>
        @endif
@@ -353,34 +359,18 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
 </p>
 @endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 @endif
-
-
-
-
-
 
             </div>
 
+
+
+            <div class="">
+                <h3 class="">O/E:</h3>
+                @foreach ($prescription->oe as $oe)
+                    <p class="font1 bullet">{{ $oe->name }}: {{ $oe->value }}</p>
+                @endforeach
+            </div>
 
         </div>
         <div class="col-6">
