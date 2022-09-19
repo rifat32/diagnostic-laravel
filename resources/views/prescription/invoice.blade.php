@@ -26,11 +26,15 @@
   .font2 {
     font-size: 2rem;
   }
+  .maindiv{
+    height: 10vh;
+  }
 
         }
         @page {
     size: 7in 9.25in;
     margin: 27mm 16mm 27mm 16mm;
+
 }
         html,body{
     height:297mm;
@@ -41,12 +45,10 @@
 </head>
 
 <body>
-    <div class="row ">
-    <div class="col-12">
- <img src="{{asset('header_image.jpg')}}"/>
-        </div>
-        <div class="col-12">
-            <div class=" container d-flex justify-content-between">
+    <div class="row maindiv ">
+
+        <div class="col-12 " style="margin-top:13.3rem;">
+            <div class="  d-flex justify-content-between">
                 <div class="col-3"><p class="font2"> name: {{ $prescription->patient->name }}</p> </div>
                 @php
                 $date = new DateTime($prescription->patient->birth_date);
@@ -62,37 +64,52 @@
         </div>
         <div class="col-6">
 
-            <div class="container">
+            <div class="">
                 <h3 class="">CC:</h3>
                 @foreach ($prescription->cc as $cc)
                     <p class="font1">{{ $cc->name }}: {{ $cc->value }}</p>
                 @endforeach
             </div>
-            {{-- <div class="container">
+            {{-- <div class="">
                 <h3 class="">Past Medical History</h3>
 
                 <p class="font2">{{ $prescription->past_medical_history }}</p>
 
             </div> --}}
-            <div class="container">
+            <div class="">
                 <h3 class="">Drug History</h3>
 
                 <p class="">{{ $prescription->drug_history }}</p>
 
             </div>
-            <div class="container">
+            <div class="">
                 <h3 class="">O/E:</h3>
                 @foreach ($prescription->oe as $oe)
                     <p class="font1">{{ $oe->name }}: {{ $oe->value }}</p>
                 @endforeach
             </div>
-            <div class="container">
+            <div class="">
                 <h3 class="">Investigations:</h3>
-                @foreach ($prescription->tests as $tests)
+                <div class="row">
+                    <div class="col-6">
+                    @foreach ($prescription->tests as $tests)
+
+                    @if ($tests->type == "xray")
                     <p class="">{{ $tests->name }}</p>
-                @endforeach
+                    @endif
+                    @endforeach
+                    </div>
+                    <div class="col-6">
+                        @foreach ($prescription->tests as $tests)
+                        @if ($tests->type == "blood")
+                        <p class="">{{ $tests->name }}</p>
+                        @endif
+                    @endforeach
+                    </div>
+                </div>
+
             </div>
-            {{-- <div class="container">
+            {{-- <div class="">
                 <h3 class="">Medical History</h3>
                 @if ($prescription->medical_history)
                     @php
@@ -114,14 +131,14 @@
 
     a <br>
    Ans:
-<div class="row container">
+<div class="row ">
    @foreach ($medical_history->diseases as $diseases)
        @if ($diseases->checked)
-           <div className="col-6">
-               <div className="form-check">
-                   <input className="form-check-input" type="checkbox" name="female" checked />
+           <div class="col-6">
+               <div class="form-check">
+                   <input class="form-check-input" type="checkbox" name="female" checked />
 
-                   <label className="form-check-label">
+                   <label class="form-check-label">
 
                        {{ $diseases->name }}
                    </label>
@@ -142,14 +159,14 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
 @if ($showAllergies)
 <p class=""> Have You suffered allergy or other reactions (Rash, Itchiness etc) to: <br>
     Ans:
-<div class="row container">
+<div class="row ">
     @foreach ($medical_history->allergies as $allergies)
         @if ($allergies->checked)
-            <div className="col-6">
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" name="female" checked />
+            <div class="col-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="female" checked />
 
-                    <label className="form-check-label">
+                    <label class="form-check-label">
 
                         {{ $allergies->name }}
                     </label>
@@ -206,15 +223,15 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
 @if ($showTreated)
 <p class=""> Have you been treated with any of the following in the past 5 year:? <br>
     Ans:
-<div class="row container">
+<div class="row ">
 
     @foreach ($medical_history->treated as $treated)
         @if ($treated->checked)
-            <div className="col-6">
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" name="female" checked />
+            <div class="col-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="female" checked />
 
-                    <label className="form-check-label">
+                    <label class="form-check-label">
 
                         {{ $treated->name }}
                     </label>
@@ -258,14 +275,14 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
                     @if ($showFemale)
                     <p class="">(11) For female Patient? <br>
                         Ans:
-                    <div class="row container">
+                    <div class="row ">
                         @foreach ($medical_history->female as $female)
                             @if ($female->checked)
-                                <div className="col-6">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" name="female" checked />
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="female" checked />
 
-                                        <label className="form-check-label">
+                                        <label class="form-check-label">
 
                                             {{ $female->name }}
                                         </label>
@@ -299,7 +316,7 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
             </div> --}}
 
 
-                <div class="container">
+                <div class="">
                 <h3 class="">Past Medical History</h3>
                 @if ($prescription->medical_history)
                     @php
@@ -314,14 +331,15 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
 @if ($showDeases)
 <p class="">
 
-<div class="row container">
+<div class="row">
+
    @foreach ($medical_history->diseases as $diseases)
        @if ($diseases->checked)
-           <div className="col-6">
-               <div className="form-check">
-                   <input className="form-check-input" type="checkbox" name="female" checked />
+           <div class="col-4">
+               <div class="form-check">
+                   <input class="form-check-input" type="checkbox" name="female" checked />
 
-                   <label className="form-check-label">
+                   <label class="form-check-label">
 
                        {{ $diseases->name }}
                    </label>
@@ -366,7 +384,7 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
 
         </div>
         <div class="col-6">
-            <div class="container">
+            <div class="">
                 <h3 class="">Medicines:</h3>
                 <div class="row ">
                     @foreach ($prescription->medicines as $medicines)
@@ -401,20 +419,20 @@ $showAllergies =   $showAllergiesCollection->contains("checked",true);
                     @endforeach
                 </div>
             </div>
-            {{-- <div class="container">
+            {{-- <div class="">
                 <h3 class="">History</h3>
 
                 <p class="">{{ $prescription->note }}</p>
 
             </div>
 
-            <div class="container">
+            <div class="">
                 <h3 class="">Fee</h3>
 
                 <p class="">{{ $prescription->fees }}</p>
 
             </div>
-            <div class="container">
+            <div class="">
                 <h3 class="">Next Appointment Date</h3>
 
                 <p class="">{{ $prescription->fees }}</p>

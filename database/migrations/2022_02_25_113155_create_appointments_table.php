@@ -19,6 +19,8 @@ class CreateAppointmentsTable extends Migration
             $table->date("date")->nullable();
             $table->string("remarks")->nullable();
             $table->string("status")->nullable();
+            $table->text("problem")->nullable();
+
             $table->unsignedBigInteger("doctor_id")->nullable();
             $table->unsignedBigInteger("patient_id")->nullable();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade');

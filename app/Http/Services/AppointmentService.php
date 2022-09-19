@@ -24,6 +24,7 @@ trait AppointmentService
         "status",
         "doctor_id",
         "patient_id",
+        "problem"
 
             )
         )->first();

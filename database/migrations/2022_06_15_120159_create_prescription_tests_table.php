@@ -18,6 +18,8 @@ class CreatePrescriptionTestsTable extends Migration
             $table->unsignedBigInteger("prescription_id")->nullable();
             $table->foreign('prescription_id')->references('id')->on('prescribtions')->onDelete('cascade');
             $table->string("name")->nullable();
+            $table->string("type")->nullable();
+
             $table->timestamps();
         });
     }

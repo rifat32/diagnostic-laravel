@@ -19,6 +19,7 @@ class Appointment extends Model
         "status",
         "doctor_id",
         "patient_id",
+        "problem"
     ];
     protected $casts = [
         "doctor_id" => 'integer',

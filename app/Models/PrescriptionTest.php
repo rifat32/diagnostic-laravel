@@ -11,6 +11,7 @@ class PrescriptionTest extends Model
     protected $fillable = [
         "prescription_id",
         "name",
+        "type"
     ];
     protected $casts = [
         'prescription_id' => 'integer',

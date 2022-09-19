@@ -113,6 +113,7 @@ return response()->json([
         foreach ($updatableData["tests"] as $test) {
             $updated_prescription->tests()->create([
                 "name" => $test["name"],
+                "type" => $test["type"],
             ]);
         }
         foreach ($updatableData["cc"] as $cc) {
@@ -198,7 +199,7 @@ return DB::transaction(function ()use($request) {
 
     public function getPrescriptionService($request)
     {
-        $prescriptions =   Prescribtion::with("patient","payments")->paginate(10);
+        $prescriptions =   Prescribtion::with("patient","payments")->latest()->paginate(10);
         return response()->json([
             "data" => $prescriptions
         ], 200);
@@ -209,6 +210,7 @@ return DB::transaction(function ()use($request) {
         ->where([
             "patient_id" => $id
         ])
+        ->latest()
         ->paginate(10);
         return response()->json([
             "data" => $prescriptions
@@ -222,6 +224,7 @@ return DB::transaction(function ()use($request) {
         ->where([
             "payment_status" => "due"
         ])
+        ->latest()
         ->paginate(10);
         return response()->json([
             "data" => $prescriptions
@@ -234,6 +237,7 @@ return DB::transaction(function ()use($request) {
         $prescriptions =   Prescribtion::with("patient","payments")
 
         ->whereBetween('created_at', [$from, $to])
+        ->latest()
         ->paginate(10);
 
         return response()->json([
@@ -321,7 +325,7 @@ $let_total_due = 0;
 
 
         foreach($due_prescriptions as $due_prescription){
-         
+
 
           $total = $due_prescription->fees;
 
